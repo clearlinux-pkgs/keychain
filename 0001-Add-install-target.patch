@@ -1,0 +1,31 @@
+From 8453f1ababb0aad785da99df3346e7fd33f25d4a Mon Sep 17 00:00:00 2001
+From: "Brett T. Warden" <brett.t.warden@intel.com>
+Date: Thu, 28 Jun 2018 11:43:34 -0700
+Subject: [PATCH] Add install target
+
+---
+ Makefile | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 91c7838..f8a904a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -7,6 +7,14 @@ TARBALL_CONTENTS=keychain README.md ChangeLog COPYING.txt keychain.pod keychain.
+ 
+ all: keychain.1 keychain keychain.spec
+ 
++bindir=$(DESTDIR)/usr/bin
++mandir=$(DESTDIR)/usr/share/man/man1
++install: keychain keychain.1
++	mkdir -p $(bindir)
++	mkdir -p $(mandir)
++	install -m0755 keychain $(bindir)
++	install -m0644 keychain.1 $(mandir)
++
+ .PHONY : tmpclean
+ tmpclean:
+ 	rm -rf dist keychain.1.orig keychain.txt
+-- 
+2.18.0
+
