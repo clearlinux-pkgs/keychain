@@ -4,7 +4,7 @@
 #
 Name     : keychain
 Version  : 2.8.5
-Release  : 1
+Release  : 2
 URL      : https://github.com/funtoo/keychain/archive/2.8.5.tar.gz
 Source0  : https://github.com/funtoo/keychain/archive/2.8.5.tar.gz
 Summary  : agent manager for OpenSSH, ssh.com, Sun SSH, and GnuPG
