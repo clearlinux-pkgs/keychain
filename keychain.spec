@@ -4,15 +4,15 @@
 #
 Name     : keychain
 Version  : 2.8.5
-Release  : 2
+Release  : 3
 URL      : https://github.com/funtoo/keychain/archive/2.8.5.tar.gz
 Source0  : https://github.com/funtoo/keychain/archive/2.8.5.tar.gz
 Summary  : agent manager for OpenSSH, ssh.com, Sun SSH, and GnuPG
 Group    : Development/Tools
 License  : GPL-2.0
-Requires: keychain-bin
-Requires: keychain-license
-Requires: keychain-man
+Requires: keychain-bin = %{version}-%{release}
+Requires: keychain-license = %{version}-%{release}
+Requires: keychain-man = %{version}-%{release}
 Patch1: 0001-Add-install-target.patch
 
 %description
@@ -26,8 +26,7 @@ is rebooted.
 %package bin
 Summary: bin components for the keychain package.
 Group: Binaries
-Requires: keychain-license
-Requires: keychain-man
+Requires: keychain-license = %{version}-%{release}
 
 %description bin
 bin components for the keychain package.
@@ -51,21 +50,31 @@ man components for the keychain package.
 
 %prep
 %setup -q -n keychain-2.8.5
+cd %{_builddir}/keychain-2.8.5
 %patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1530211698
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1604098440
+export GCC_IGNORE_WERROR=1
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 make  %{?_smp_mflags}
 
+
 %install
-export SOURCE_DATE_EPOCH=1530211698
+export SOURCE_DATE_EPOCH=1604098440
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/keychain
-cp COPYING.txt %{buildroot}/usr/share/doc/keychain/COPYING.txt
+mkdir -p %{buildroot}/usr/share/package-licenses/keychain
+cp %{_builddir}/keychain-2.8.5/COPYING.txt %{buildroot}/usr/share/package-licenses/keychain/cc501127ed2d0d41c4892d6e6ce6a9ea51c3d4bf
 %make_install
 
 %files
@@ -76,9 +85,9 @@ cp COPYING.txt %{buildroot}/usr/share/doc/keychain/COPYING.txt
 /usr/bin/keychain
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/keychain/COPYING.txt
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/keychain/cc501127ed2d0d41c4892d6e6ce6a9ea51c3d4bf
 
 %files man
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/man/man1/keychain.1
